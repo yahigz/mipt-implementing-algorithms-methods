@@ -1,0 +1,9 @@
+8
+insert 2
+insert 2
+insert 2
+delete 4
+delete 1
+delete 1
+delete 1
+insert 3

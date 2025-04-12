@@ -1,0 +1,24 @@
+23
+delete 4
+insert -8
+delete 10
+delete -9
+insert 10
+insert 5
+delete -3
+insert -5
+insert -2
+delete 5
+delete -7
+delete -10
+delete 3
+insert -9
+insert 1
+delete 6
+delete 5
+delete 5
+delete -8
+insert 9
+insert -1
+insert 7
+insert 9

@@ -1,0 +1,11 @@
+10
+insert 3
+delete 5
+insert -3
+delete 4
+delete -1
+delete 5
+delete -4
+insert 2
+insert 2
+insert -3
