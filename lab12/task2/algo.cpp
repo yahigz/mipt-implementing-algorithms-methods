@@ -1,8 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <stack>
+#include <time.h>
 #include <cmath>
 #include <string>
+#include <chrono>
+#include <iomanip>
 
 template<typename T>
 class ScapeGoatTree{
@@ -18,6 +21,7 @@ public:
     };
 
 private:
+
     double alpha_;
 
     Node* root_;
@@ -360,9 +364,9 @@ public:
                     scapegoat.second->left = scapegoat.first;
                 }
             }
-            max_count_ = std::max(8, 2 * root_->sz);
         }
 
+        max_count_ = std::max(8, 2 * root_->sz);
 
         return true;
     }
@@ -392,7 +396,8 @@ public:
         return true;
     }
 
-    ScapeGoatTree(double alpha): alpha_(alpha), max_count_(8), root_(nullptr) {}
+    ScapeGoatTree(double alpha): alpha_(alpha), max_count_(8), root_(nullptr) {
+    }
 
 
     ~ScapeGoatTree() {
@@ -400,30 +405,37 @@ public:
     }
 };
 
-int main() {
+int main(int argc, char* argv[]) {
     std::ios_base::sync_with_stdio(false);
     std::cin.tie(0);
-    ScapeGoatTree<int> sgt(0.5);
+
+    char* endptr;
+    double alpha = strtod(argv[1], &endptr);
+    ScapeGoatTree<int> sgt(alpha);
 
     int q;
     std::cin >> q;
+    auto start_time = std::chrono::high_resolution_clock::now();
     while (q--) {
         std::string s;
         std::cin >> s;
         if (s == "insert") {
             int x;
             std::cin >> x;
-            std::cout << sgt.Insert(x) << '\n';
+            sgt.Insert(x);
         }
         if (s == "delete") {
             int x;
             std::cin >> x;
-            std::cout << sgt.Delete(x) << '\n';
+            sgt.Delete(x);
         }
         if (s == "search") {
             int x;
             std::cin >> x;
-            std::cout << (sgt.Search(x) == nullptr ? 0 : 1) << '\n';
+            sgt.Search(x);
         }
     }
+    auto end_time = std::chrono::high_resolution_clock::now();
+    auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+    std::cout << alpha << ' ' << diff.count() << '\n';
 }
