@@ -218,6 +218,6 @@ public:
 };
 
 int main() {
-    ExternalSorter srt("./custom_test/input.txt", "./custom_test/output.txt", 48, 16, 500);
+    ExternalSorter srt("./custom_test/input.txt", "./custom_test/output.txt", 256, 64, 10000);
     srt.Sort();
 }
