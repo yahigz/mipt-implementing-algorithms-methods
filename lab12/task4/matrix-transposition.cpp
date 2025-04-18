@@ -285,7 +285,7 @@ class MatrixTransposer {
         MatrixTransposer(int small_size, int side, std::string input, std::string output): small_size_(small_size), side_(side),
                                                                            input_file_(input), output_file_(output) {
             CleanUp();
-                                                                           }
+        }
         void GetTransposed() {
             std::filesystem::create_directory("./tmp");
             std::string filename = Transpose(side_, input_file_);
