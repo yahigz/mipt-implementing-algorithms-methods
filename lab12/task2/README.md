@@ -4,18 +4,18 @@
 
 *График зависимости времени работы от alpha, случайные данные*
 
-![График зависимости времени работы от alpha, случайные данные](/pictures/performance_plot_random.png)
+![График зависимости времени работы от alpha, случайные данные](./pictures/performance_plot_random.png)
 
 *График зависимости времени работы от alpha, худший случай*
 
-![График зависимости времени работы от alpha, худший случай](/pictures/performance_plot_max.png)
+![График зависимости времени работы от alpha, худший случай](./pictures/performance_plot_max.png)
 
 *График зависимости времени работы insert от alpha, худший случай*
 
-![График зависимости времени работы insert от alpha, худший случай](/pictures/performance_plot_max_insert.png)
+![График зависимости времени работы insert от alpha, худший случай](./pictures/performance_plot_max_insert.png)
 
 *График зависимости времени работы delete от alpha, худший случай*
 
-![График зависимости времени работы delete от alpha, худший случай](/pictures/performance_plot_max_delete.png)
+![График зависимости времени работы delete от alpha, худший случай](./pictures/performance_plot_max_delete.png)
 
 Видно, что delete очень сильно медленее insert в худшем случае. Стоит попытаться оптимизировать операцию удаления. 
