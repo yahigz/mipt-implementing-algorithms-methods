@@ -23,4 +23,4 @@ similar_docs = db.similarity_search_with_score(query, k=5)
 
 print(f"Запрос: '{query}'\n")
 for i, (doc, score) in enumerate(similar_docs):
-    print(f"{i+1}. {doc.page_content} (сходство: {score:.4f})")
+    print(f"{i+1}. {doc.page_content} (различие: {score:.4f})")
