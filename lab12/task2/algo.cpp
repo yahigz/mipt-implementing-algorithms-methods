@@ -415,7 +415,9 @@ int main(int argc, char* argv[]) {
 
     int q;
     std::cin >> q;
-    auto start_time = std::chrono::high_resolution_clock::now();
+    int64_t ans = 0;
+    bool flag = false;
+    std::chrono::_V2::system_clock::time_point start_time;
     while (q--) {
         std::string s;
         std::cin >> s;
@@ -425,6 +427,10 @@ int main(int argc, char* argv[]) {
             sgt.Insert(x);
         }
         if (s == "delete") {
+            if (!flag) {
+                start_time = std::chrono::high_resolution_clock::now();
+                flag = true;
+            }
             int x;
             std::cin >> x;
             sgt.Delete(x);
@@ -437,5 +443,6 @@ int main(int argc, char* argv[]) {
     }
     auto end_time = std::chrono::high_resolution_clock::now();
     auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-    std::cout << alpha << ' ' << diff.count() << '\n';
+    ans = diff.count();
+    std::cout << alpha << ' ' << ans << '\n';
 }

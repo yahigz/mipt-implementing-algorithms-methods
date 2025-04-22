@@ -44,12 +44,12 @@ def plot_performance(alphas, times):
                     textcoords='offset points', ha='center', fontsize=9)
     
     # Сохраняем график
-    plt.savefig('performance_plot_random.png', dpi=300, bbox_inches='tight')
+    plt.savefig('performance_plot_max_delete.png', dpi=300, bbox_inches='tight')
     plt.close()
-    print("График успешно сохранён в файл 'performance_plot_random.png'")
+    print("График успешно сохранён в файл 'performance_plot_max_delete.png'")
 
 def main():
-    input_file = 'testing_data_random.txt'
+    input_file = 'testing_data_max_delete.txt'
     
     try:
         alphas, times = load_data(input_file)

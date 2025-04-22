@@ -37,8 +37,8 @@ def main():
     if not compile_cpp():
         return
     
-    test_file = 'random_test.txt'
-    output_file = 'testing_data_random.txt'
+    test_file = 'max_test.txt'
+    output_file = 'testing_data_max_delete.txt'
     
     with open(output_file, 'w') as out_f:
         alpha = 0.5
