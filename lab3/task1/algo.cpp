@@ -46,6 +46,9 @@ class IncomeMaximizer{
             std::vector<std::pair<ll, int>> dp(coor.size(), {0, -1});
             dp[0] = {0, -1};
             for (int i = 0; i < coor.size(); ++i) {
+                if (i > 0 && dp[i - 1].first > dp[i].first) {
+                    dp[i] = dp[i - 1];
+                }
                 for (auto ind : list_of_jobs[i]) {
                     if (dp[coor_to_ind[jobs_[ind].d]].first < dp[i].first + jobs_[ind].inc) {
                         dp[coor_to_ind[jobs_[ind].d]] = {dp[i].first + jobs_[ind].inc, ind}; 
