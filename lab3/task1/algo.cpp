@@ -1,14 +1,14 @@
 #include <algorithm>
 #include <iostream>
-#include <map>
 #include <vector>
 
 using ll = long long;
 
 struct Job {
-    ll r;
-    ll d;
     ll inc;
+    int r;
+    int d;
+    int id;
 };
 
 class IncomeMaximizer{ 
@@ -23,56 +23,54 @@ class IncomeMaximizer{
             if (jobs_.empty()) {
                 return {0, {}};
             }
-            std::vector<ll> coor;
-            for (auto elem : jobs_) {
-                coor.push_back(elem.r);
-                coor.push_back(elem.d);
-                coor.push_back(elem.d + 1);
-            }
-            sort(coor.begin(), coor.end());
-            coor.resize(unique(coor.begin(), coor.end()) - coor.begin());
 
-            std::map<ll, int> coor_to_ind;
-            for (int i = 0; i < coor.size(); ++i) {
-                coor_to_ind[coor[i]] = i;
-            }
+            sort(jobs_.begin(), jobs_.end(), [](const Job& left, const Job& right) -> bool {
+                if (left.d != right.d) {
+                    return left.d < right.d;
+                }
+                if (left.r != right.r) {
+                    return left.r < right.r;
+                }
+                if (left.inc != right.inc) {
+                    return left.inc < right.inc;
+                }
+                return left.id < right.id;
+            });
 
-            std::vector<std::vector<int>> list_of_jobs(coor.size());
+            std::vector<std::pair<int, std::pair<ll, int>>> dp;
+            std::vector<int> prev(jobs_.size() + 1);
 
             for (int i = 0; i < jobs_.size(); ++i) {
-                list_of_jobs[coor_to_ind[jobs_[i].r]].push_back(i);
-            }
-
-            std::vector<std::pair<ll, int>> dp(coor.size(), {0, -1});
-            dp[0] = {0, -1};
-            for (int i = 0; i < coor.size(); ++i) {
-                if (i > 0 && dp[i - 1].first > dp[i].first) {
-                    dp[i] = dp[i - 1];
-                }
-                for (auto ind : list_of_jobs[i]) {
-                    if (dp[coor_to_ind[jobs_[ind].d]].first < dp[i].first + jobs_[ind].inc) {
-                        dp[coor_to_ind[jobs_[ind].d]] = {dp[i].first + jobs_[ind].inc, ind}; 
+                ll best = 0;
+                int best_ind = -1;
+                if (i > 0) {
+                    auto it = upper_bound(dp.begin(), dp.end(), std::make_pair(jobs_[i].r, std::make_pair(INF, int(jobs_.size()))));
+                    if (it != dp.begin()) {
+                        --it;
+                        best = it->second.first;
+                        best_ind = it->second.second;
                     }
                 }
-            }
-
-            ll ans = -INF;
-            int ind_ans = -1;
-            for (int i = 0; i < coor.size(); ++i) {
-                if (dp[i].first > ans) {
-                    ans = dp[i].first;
-                    ind_ans = i;
+                std::pair<int, std::pair<ll, int>> curr = {jobs_[i].d, std::make_pair(best + jobs_[i].inc, jobs_[i].id)};
+                prev[jobs_[i].id] = best_ind;
+                while (!dp.empty() && dp.back().first == curr.first && dp.back().second.first < curr.second.first) {
+                    dp.pop_back();
+                }
+                if (dp.empty() || curr.second.first > dp.back().second.first) {
+                    dp.push_back(curr);
                 }
             }
-            std::vector<int> indexes;
-            while (true) {
-                if (dp[ind_ans].second == -1) {
-                    break;
-                } 
-                indexes.push_back(dp[ind_ans].second + 1);
-                ind_ans = coor_to_ind[jobs_[dp[ind_ans].second].r];
-            }
+
+            ll ans = dp.back().second.first;
+
+            int ind = dp.back().second.second;
             
+            std::vector<int> indexes;
+            while (ind != -1) {
+                indexes.push_back(ind);
+                ind = prev[ind];
+            }
+
             reverse(indexes.begin(), indexes.end());
 
             return {ans, indexes};
@@ -80,11 +78,14 @@ class IncomeMaximizer{
 };  
 
 int main() {
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(0);
     int n;
     std::cin >> n;
     std::vector<Job> a(n);
-    for (auto& elem : a) {
-        std::cin >> elem.r >> elem.d >> elem.inc;
+    for (int i = 0; i < n; ++i) {
+        std::cin >> a[i].r >> a[i].d >> a[i].inc;
+        a[i].id = i + 1;
     }
     auto [ans, indexes] = IncomeMaximizer(a).Calc();
     std::cout << ans << ' ' << indexes.size() << '\n';
