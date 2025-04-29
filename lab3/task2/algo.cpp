@@ -35,7 +35,7 @@ class WeightedTardinessMinimizer{
 
         struct Node{
             Node* left;
-            Job& job;
+            Job job;
             Node(Node* left, Job job): left(left), job(job) {}
         };
 
@@ -96,11 +96,13 @@ class WeightedTardinessMinimizer{
                 }
                 return left.id < right.id;
             });
+            
+            reverse(jobs_.begin(), jobs_.end());
 
             std::vector<ll> suff = GetSuffixSum();
             std::vector<List> sch(suff[0] + 1);
-            std::vector<ll> opt(suff[0] + 1, CONSTANTS::INF);
-            std::vector<std::vector<std::pair<int, ll>>> p(jobs_.size(), std::vector<std::pair<int, ll>>(suff[0], {-1, -1}));
+            std::vector<ll> opt(suff[0] + 1, 0);
+            std::vector<std::vector<std::pair<int, ll>>> p(jobs_.size(), std::vector<std::pair<int, ll>>(suff[0] + 1, {-1, -1}));
             for (int t = 0; t <= GetSumFromIndToEnd(1, suff); ++t) {
                 if (t + jobs_[0].p - jobs_[0].d <= 0) {
                     opt[t] = jobs_[0].w;
@@ -109,8 +111,8 @@ class WeightedTardinessMinimizer{
                 }
             }
             for (int j = 1; j < jobs_.size(); ++j) {
-                std::vector<ll> new_opt(suff[0] + 1);
-                for (int t = 0; t <= GetSumFromIndToEnd(j + 1, suff); ++t) {
+                std::vector<ll> new_opt(suff[0] + 1, 0);
+                for (int t = 0; t <= suff[0] - (GetSumFromIndToEnd(0, suff) - GetSumFromIndToEnd(j + 1, suff)); ++t) {
                     ll opt_to_begin, opt_to_end;
 
                     if (t + jobs_[j].p - jobs_[j].d <= 0) {
@@ -149,11 +151,16 @@ class WeightedTardinessMinimizer{
                 delete sv;
             }
             reverse(schedule.begin(), schedule.end());
-            return {schedule, nontardiness};
+            ll sum_w = 0;
+            for (auto elem : jobs_) {
+                sum_w += elem.w;
+            }
+            ll tardiness = sum_w - nontardiness;
+            return {schedule, tardiness};
         }
 };
 
-#define KNAPSACK_SOLVER
+// #define KNAPSACK_SOLVER
 
 int main() {
     int n;
@@ -172,7 +179,7 @@ int main() {
             a[i].d = m;
             a[i].id = i;
         }
-        auto [sch, ans] = WeightedTardinessMinimizer(a).GetSchedule();
+        auto [sch, ans] = WeightedTardinessMinimizer(a).GetSchedule();  
 
         std::cout << ans << '\n';
     #else
@@ -186,5 +193,12 @@ int main() {
             std::cin >> a[i].w;
             a[i].id = i;
         }
+        auto [sch, ans] = WeightedTardinessMinimizer(a).GetSchedule();
+
+        std::cout << ans << '\n';  
+        for (auto elem : sch) {
+            std::cout << elem.id << ' ';
+        }
+        std::cout << '\n';
     #endif
 }
