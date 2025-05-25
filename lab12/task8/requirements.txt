@@ -1,0 +1,1 @@
+pip install langchain faiss-cpu torch sentence-transformers
